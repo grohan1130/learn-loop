@@ -8,7 +8,7 @@
   <body>
     <div>
       <h1>Register Student</h1>
-      <form>
+      <form action="{{ url_for('views.register_student') }}" method="POST">
         <label for="first-name">First name:</label><br>
         <input type="text" id="first-name" name="first-name"><br>
         <label for="last-name">Last name:</label><br>
