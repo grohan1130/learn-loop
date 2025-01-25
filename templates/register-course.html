@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Register Course</title>
+    
+  </head>
+  <body>
+    <div>
+      <h1>Register Course</h1>
+      <form action="{{ url_for('views.register_course') }}" method="POST">
+        <label for="course-department">Course Department:</label><br>
+        <input type="text" id="course-department" name="course-department"><br>
+        <label for="course-number">Course Number:</label><br>
+        <input type="text" id="course-number" name="course-number"><br>
+        <label for="course-name">Course Name:</label><br>
+        <input type="text" id="course-name" name="course-name"><br><br>
+        <button type="submit">Register Course</button>
+      </form>
+      
+    </div>
+  </body>
+</html>
