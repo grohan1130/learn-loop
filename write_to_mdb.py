@@ -92,5 +92,27 @@ def verify_login_teacher(teacher_data):
         # Close the MongoDB client connection
         client.close()
 
+# login student (verify username/passowrd credentials)
+def verify_login_student(student_data):
+    connection_string = get_mongodb_connection_string()
+    try:
+        # connect to mongodb
+        client = MongoClient(connection_string)
+        
+        # Select the database and collection
+        db = client['learn-loop-db']
+        collection = db['student_body']
+
+        query = {
+            "student_username": student_data["student_username"],
+            "student_password": student_data["student_password"]
+        }
+        
+        # Check if the user exists
+        return collection.find_one(query) is not None
+
+    except Exception as e:
+        print("Failed to interact with MongoDB:", e)
+        return False  # Return False if there's an exception
     
 

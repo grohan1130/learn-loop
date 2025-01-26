@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify
-from write_to_mdb import add_student, add_teacher, add_course, verify_login_teacher
+from write_to_mdb import add_student, add_teacher, add_course, verify_login_teacher, verify_login_student
 
 views = Blueprint(__name__, "views")
 
@@ -64,9 +64,9 @@ def register_teacher():
 def register_course():
     if request.method == "POST": # form submitted -> POST request
         # extract form data
-        department = request.form.get("course-department")
-        number = request.form.get("course-number")
-        name = request.form.get("course-name")
+        department = request.form.get("department")
+        number = request.form.get("number")
+        name = request.form.get("name")
         # validate and process data
         if not (department and number and name):
             print("All fields are required!", "error")
@@ -78,6 +78,28 @@ def register_course():
         }
         add_course(course_data)
     return render_template("register-course.html")
+
+@views.route("login-student", methods = ["GET", "POST"])
+def login_student():
+    if request.method == "POST": # form submitted -> POST request
+        # extract for data
+        username = request.form.get("username")
+        password = request.form.get("password")
+        print(username, password)
+        if not (username and password):
+            print("All fields are required!", "error")
+            return redirect(url_for("views.login_teacher"))
+        student_data = {
+            "student_username": username,
+            "student_password": password
+        }
+        if verify_login_student(student_data):
+            print("Login successful!")
+            return redirect(url_for("views.home"))  # Redirect to dashboard or another page
+        else:
+            print("Invalid credentials!", "error")
+            return redirect(url_for("views.login_student"))
+    return render_template("login-student.html")
 
 @views.route("/login-teacher", methods = ["GET", "POST"])
 def login_teacher():
