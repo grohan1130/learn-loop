@@ -1,2 +1,3 @@
 learn-loop-venv/
 .env
+__pycache__/
