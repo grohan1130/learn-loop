@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify
-from write_to_mdb import add_student, add_teacher, add_course
+from write_to_mdb import add_student, add_teacher, add_course, verify_login_teacher
 
 views = Blueprint(__name__, "views")
 
@@ -78,3 +78,25 @@ def register_course():
         }
         add_course(course_data)
     return render_template("register-course.html")
+
+@views.route("/login-teacher", methods = ["GET", "POST"])
+def login_teacher():
+    if request.method == "POST": # form submitted -> POST request
+        # extract form data
+        username = request.form.get("username")
+        password = request.form.get("password")
+        print(username, password)
+        if not (username and password):
+            print("All fields are required!", "error")
+            return redirect(url_for("views.login_teacher"))
+        teacher_data = {
+            "teacher_username": username,
+            "teacher_password": password
+        }
+        if verify_login_teacher(teacher_data):
+            print("Login successful!")
+            return redirect(url_for("views.home"))  # Redirect to dashboard or another page
+        else:
+            print("Invalid credentials!", "error")
+            return redirect(url_for("views.login_teacher"))
+    return render_template("login-teacher.html")
