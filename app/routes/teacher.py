@@ -1,15 +1,18 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
-from write_to_mdb import add_course
+from write_to_mdb import add_course, get_courses_by_teacher
 
 teacher = Blueprint("teacher", __name__)
 
-# Teacher Dashboard
+# Teacher Dashboard (Displays courses taught by the teacher)
 @teacher.route("/teacher-dashboard")
 def teacher_dashboard():
     if "teacher_username" not in session:
         return redirect(url_for("auth.login_teacher"))
 
-    return render_template("teacher-dashboard.html", first_name=session["teacher_first_name"])
+    # Fetch courses taught by the logged-in teacher
+    courses = get_courses_by_teacher(session["teacher_username"])
+
+    return render_template("teacher-dashboard.html", first_name=session["teacher_first_name"], courses=courses)
 
 
 # Register Course (Only for logged-in teachers)

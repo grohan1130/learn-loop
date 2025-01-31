@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
+import bson
 
 # Get the MongoDB URI from the environment variable
 def get_mongodb_connection_string():
@@ -34,17 +35,36 @@ def add_teacher(teacher_data):
     except Exception as e:
         print("Failed to interact with MongoDB:", e)
 
-# Add to course_catalog database
+# Add a course to the database with correct data types
 def add_course(course_data):
     connection_string = get_mongodb_connection_string()
     try:
         with MongoClient(connection_string) as client:
             db = client['learn-loop-db']
             collection = db['course_catalog']
-            result = collection.insert_one(course_data)
-            print("Document inserted with ID:", result.inserted_id)
+
+            # Ensure correct data types
+            course_department = str(course_data["course_department"]).strip().upper()
+            course_number = bson.Int64(int(course_data["course_number"]))  # Enforce int64
+            course_name = str(course_data["course_name"]).strip()
+            teacher_username = str(course_data["teacher_username"]).strip()
+
+            # Generate course_id properly
+            course_id = f"{course_department}{course_number}"  # Example: "CSE330"
+
+            course_document = {
+                "course_department": course_department,
+                "course_number": course_number,
+                "course_name": course_name,
+                "course_id": course_id,  # Corrected ID format
+                "teacher_username": teacher_username
+            }
+
+            result = collection.insert_one(course_document)
+            print(f"Course inserted with ID: {result.inserted_id}")
+
     except Exception as e:
-        print("Failed to interact with MongoDB:", e)
+        print("Failed to insert course into MongoDB:", e)
 
 # login teacher (verify username/password credentials)
 def verify_login_teacher(teacher_data):
@@ -83,3 +103,23 @@ def verify_login_student(student_data):
     except Exception as e:
         print("Failed to interact with MongoDB:", e)
         return None  # Return None if there's an exception
+
+# Function to get courses taught by a specific teacher
+def get_courses_by_teacher(teacher_username):
+    connection_string = get_mongodb_connection_string()
+    try:
+        with MongoClient(connection_string) as client:
+            db = client['learn-loop-db']
+            collection = db['course_catalog']
+
+            # Query courses by teacher username
+            courses = list(collection.find({"teacher_username": teacher_username}))
+
+            # Convert MongoDB ObjectId to string
+            for course in courses:
+                course["_id"] = str(course["_id"])
+
+            return courses
+    except Exception as e:
+        print("Failed to retrieve courses from MongoDB:", e)
+        return []
