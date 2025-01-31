@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Course</title>
+</head>
+<body>
+    <div>
+        <h1>Register a Course</h1>
+        <form action="{{ url_for('teacher.register_course') }}" method="POST">
+            <label for="department">Department:</label><br>
+            <input type="text" id="department" name="department" required><br>
+
+            <label for="number">Course Number:</label><br>
+            <input type="text" id="number" name="number" required><br>
+
+            <label for="name">Course Name:</label><br>
+            <input type="text" id="name" name="name" required><br>
+
+            <button type="submit">Register Course</button>
+        </form>
+        <br>
+        <a href="{{ url_for('teacher.teacher_dashboard') }}">Back to Dashboard</a>
+    </div>
+</body>
+</html>

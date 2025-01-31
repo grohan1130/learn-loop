@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learn Loop - Home</title>
+</head>
+<body>
+    <div>
+        <h1>Welcome to Learn Loop</h1>
+        <p>Enhancing education through technology.</p>
+
+        <h2>Login</h2>
+        <a href="{{ url_for('auth.login_student') }}">Student Login</a> |
+        <a href="{{ url_for('auth.login_teacher') }}">Teacher Login</a>
+
+        <h2>Register</h2>
+        <a href="{{ url_for('auth.register_student') }}">Register as a Student</a> |
+        <a href="{{ url_for('auth.register_teacher') }}">Register as a Teacher</a>
+    </div>
+</body>
+</html>
