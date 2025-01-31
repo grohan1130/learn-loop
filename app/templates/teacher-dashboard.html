@@ -14,9 +14,10 @@
             <ul>
                 {% for course in courses %}
                     <li>
-                        <strong>{{ course.course_id }}</strong>: 
-                        {{ course.course_name }} 
-                        ({{ course.course_department }} {{ course.course_number|int }})
+                        <a href="{{ url_for('teacher.course_page', course_id=course.course_id) }}">
+                            <strong>{{ course.course_id }}</strong>: {{ course.course_name }} 
+                            ({{ course.course_department }} {{ course.course_number|int }})
+                        </a>
                     </li>
                 {% endfor %}
             </ul>

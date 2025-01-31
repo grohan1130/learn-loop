@@ -123,3 +123,27 @@ def get_courses_by_teacher(teacher_username):
     except Exception as e:
         print("Failed to retrieve courses from MongoDB:", e)
         return []
+
+# Fetch teacher's full name based on username
+def get_teacher_details(teacher_username):
+    connection_string = get_mongodb_connection_string()
+    try:
+        with MongoClient(connection_string) as client:
+            db = client['learn-loop-db']
+            collection = db['teacher_directory']
+
+            # Query to find the teacher
+            teacher = collection.find_one({"teacher_username": teacher_username}, 
+                                          {"_id": 0, "teacher_first_name": 1, "teacher_last_name": 1})
+
+            if teacher:
+                return {
+                    "first_name": teacher["teacher_first_name"],
+                    "last_name": teacher["teacher_last_name"]
+                }
+            else:
+                return {"first_name": "Unknown", "last_name": "Unknown"}
+
+    except Exception as e:
+        print("Failed to retrieve teacher details from MongoDB:", e)
+        return {"first_name": "Unknown", "last_name": "Unknown"}
