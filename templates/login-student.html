@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <title>Login Student</title>
-    
-  </head>
-  <body>
+</head>
+<body>
     <div>
-      <h1>Login Teacher</h1>
-      <form action="{{ url_for('views.login_student') }}" method="POST">
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username"><br>
-        <label for="password">Password:</label><br>
-        <input type="text" id="password" name="password"><br>
-        <button type="submit">Login</button>
-      </form>
-      
+        <h1>Login Student</h1>
+        <form action="{{ url_for('views.login_student') }}" method="POST">
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username"><br>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password"><br> 
+            <button type="submit">Login</button>
+        </form>
     </div>
-  </body>
+</body>
 </html>

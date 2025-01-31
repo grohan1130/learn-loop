@@ -14,18 +14,11 @@ def get_mongodb_connection_string():
 def add_student(student_data):
     connection_string = get_mongodb_connection_string()
     try:
-        # Connect to MongoDB
-        client = MongoClient(connection_string)
-        
-        # Select the database and collection
-        db = client['learn-loop-db']
-        collection = db['student_body']
-        
-        # Insert the document into the collection
-        result = collection.insert_one(student_data)
-        print(student_data)
-        print("Document inserted with ID:", result.inserted_id)
-    
+        with MongoClient(connection_string) as client:
+            db = client['learn-loop-db']
+            collection = db['student_body']
+            result = collection.insert_one(student_data)
+            print("Document inserted with ID:", result.inserted_id)
     except Exception as e:
         print("Failed to interact with MongoDB:", e)
 
@@ -33,17 +26,11 @@ def add_student(student_data):
 def add_teacher(teacher_data):
     connection_string = get_mongodb_connection_string()
     try:
-        # Connect to MongoDB
-        client = MongoClient(connection_string)
-        
-        # Select the database and collection
-        db = client['learn-loop-db']
-        collection = db['teacher_directory']
-        
-        # Insert the document into the collection
-        result = collection.insert_one(teacher_data)
-        print(teacher_data)
-        print("Document inserted with ID:", result.inserted_id)
+        with MongoClient(connection_string) as client:
+            db = client['learn-loop-db']
+            collection = db['teacher_directory']
+            result = collection.insert_one(teacher_data)
+            print("Document inserted with ID:", result.inserted_id)
     except Exception as e:
         print("Failed to interact with MongoDB:", e)
 
@@ -51,17 +38,11 @@ def add_teacher(teacher_data):
 def add_course(course_data):
     connection_string = get_mongodb_connection_string()
     try:
-        # Connect to MongoDB
-        client = MongoClient(connection_string)
-        
-        # Select the database and collection
-        db = client['learn-loop-db']
-        collection = db['course_catalog']
-        
-        # Insert the document into the collection
-        result = collection.insert_one(course_data)
-        print(course_data)
-        print("Document inserted with ID:", result.inserted_id)
+        with MongoClient(connection_string) as client:
+            db = client['learn-loop-db']
+            collection = db['course_catalog']
+            result = collection.insert_one(course_data)
+            print("Document inserted with ID:", result.inserted_id)
     except Exception as e:
         print("Failed to interact with MongoDB:", e)
 
@@ -69,50 +50,36 @@ def add_course(course_data):
 def verify_login_teacher(teacher_data):
     connection_string = get_mongodb_connection_string()
     try:
-        # Connect to MongoDB
-        client = MongoClient(connection_string)
-        
-        # Select the database and collection
-        db = client['learn-loop-db']
-        collection = db['teacher_directory']
+        with MongoClient(connection_string) as client:
+            db = client['learn-loop-db']
+            collection = db['teacher_directory']
 
-        query = {
-            "teacher_username": teacher_data["teacher_username"],
-            "teacher_password": teacher_data["teacher_password"]
-        }
-        
-        # Check if the user exists
-        return collection.find_one(query) is not None
+            query = {
+                "teacher_username": teacher_data["teacher_username"],
+                "teacher_password": teacher_data["teacher_password"]
+            }
 
+            teacher = collection.find_one(query)  # Fetch full teacher record
+            return teacher if teacher else None  # Return dictionary or None
     except Exception as e:
         print("Failed to interact with MongoDB:", e)
-        return False  # Return False if there's an exception
+        return None  # Return None if there's an exception
 
-    finally:
-        # Close the MongoDB client connection
-        client.close()
-
-# login student (verify username/passowrd credentials)
+# login student (verify username/password credentials)
 def verify_login_student(student_data):
     connection_string = get_mongodb_connection_string()
     try:
-        # connect to mongodb
-        client = MongoClient(connection_string)
-        
-        # Select the database and collection
-        db = client['learn-loop-db']
-        collection = db['student_body']
+        with MongoClient(connection_string) as client:
+            db = client['learn-loop-db']
+            collection = db['student_body']
 
-        query = {
-            "student_username": student_data["student_username"],
-            "student_password": student_data["student_password"]
-        }
-        
-        # Check if the user exists
-        return collection.find_one(query) is not None
+            query = {
+                "student_username": student_data["student_username"],
+                "student_password": student_data["student_password"]
+            }
 
+            student = collection.find_one(query)  # Fetch full student record
+            return student if student else None  # Return dictionary or None
     except Exception as e:
         print("Failed to interact with MongoDB:", e)
-        return False  # Return False if there's an exception
-    
-
+        return None  # Return None if there's an exception
