@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
-from write_to_mdb import add_student, add_teacher, verify_login_teacher, verify_login_student
+from app.db.student_db import add_student, verify_login_student
+from app.db.teacher_db import add_teacher, verify_login_teacher
 
 auth = Blueprint("auth", __name__)
 

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
-from write_to_mdb import add_course, get_courses_by_teacher, get_teacher_details
+from app.db.course_db import add_course, get_courses_by_teacher, get_course_by_id
+from app.db.teacher_db import get_teacher_details
 
 teacher = Blueprint("teacher", __name__)
 
@@ -54,8 +55,7 @@ def course_page(course_id):
         return redirect(url_for("auth.login_teacher"))
 
     # Fetch the course details for this specific course
-    courses = get_courses_by_teacher(session["teacher_username"])
-    course = next((c for c in courses if c["course_id"] == course_id), None)
+    course = get_course_by_id(course_id)
 
     if not course:
         return "<h1>Course not found</h1>", 404  # Display 404 if course is not found
