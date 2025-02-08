@@ -6,7 +6,7 @@
 </head>
 <body>
     <div>
-        <h1>Welcome, {{ first_name }}!</h1>
+        <h1>Welcome, {{ first_name }} {{ last_name }}!</h1>
         <p>This is your teacher dashboard.</p>
 
         <h2>Your Courses</h2>
@@ -15,17 +15,15 @@
                 {% for course in courses %}
                     <li>
                         <a href="{{ url_for('teacher.course_page', course_id=course.course_id) }}">
-                            <strong>{{ course.course_id }}</strong>: {{ course.course_name }} 
-                            ({{ course.course_department }} {{ course.course_number|int }})
+                            {{ course.course_name }} ({{ course.course_id }})
                         </a>
                     </li>
                 {% endfor %}
             </ul>
         {% else %}
-            <p>You have not registered any courses yet.</p>
+            <p>You are not currently teaching any courses.</p>
         {% endif %}
 
-        <a href="{{ url_for('teacher.register_course') }}">Register a New Course</a><br>
         <a href="{{ url_for('auth.logout') }}">Logout</a>
     </div>
 </body>

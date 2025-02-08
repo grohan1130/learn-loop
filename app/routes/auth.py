@@ -4,7 +4,6 @@ from app.db.teacher_db import add_teacher, verify_login_teacher
 
 auth = Blueprint("auth", __name__)
 
-# Student Registration
 @auth.route("/register-student", methods=["GET", "POST"])
 def register_student():
     if request.method == "POST":
@@ -16,7 +15,6 @@ def register_student():
         university = request.form.get("university")
 
         if not (first_name and last_name and email and username and password and university):
-            print("All fields are required!", "error")
             return redirect(url_for("auth.register_student"))
 
         student_data = {
@@ -28,13 +26,11 @@ def register_student():
             "student_university": university
         }
         add_student(student_data)
-
-        return redirect(url_for("auth.login_student"))  # Redirect to login after registration
+        return redirect(url_for("auth.login_student"))
 
     return render_template("register-student.html")
 
 
-# Teacher Registration
 @auth.route("/register-teacher", methods=["GET", "POST"])
 def register_teacher():
     if request.method == "POST":
@@ -46,7 +42,6 @@ def register_teacher():
         university = request.form.get("university")
 
         if not (first_name and last_name and email and username and password and university):
-            print("All fields are required!", "error")
             return redirect(url_for("auth.register_teacher"))
 
         teacher_data = {
@@ -58,22 +53,16 @@ def register_teacher():
             "teacher_university": university
         }
         add_teacher(teacher_data)
-
-        return redirect(url_for("auth.login_teacher"))  # Redirect to login after registration
+        return redirect(url_for("auth.login_teacher"))
 
     return render_template("register-teacher.html")
 
 
-# Student Login
 @auth.route("/login-student", methods=["GET", "POST"])
 def login_student():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-
-        if not (username and password):
-            print("All fields are required!", "error")
-            return redirect(url_for("auth.login_student"))
 
         student = verify_login_student({"student_username": username, "student_password": password})
 
@@ -81,23 +70,15 @@ def login_student():
             session["student_username"] = student["student_username"]
             session["student_first_name"] = student["student_first_name"]
             return redirect(url_for("student.student_dashboard"))
-        else:
-            print("Invalid credentials!", "error")
-            return redirect(url_for("auth.login_student"))
 
     return render_template("login-student.html")
 
 
-# Teacher Login
 @auth.route("/login-teacher", methods=["GET", "POST"])
 def login_teacher():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-
-        if not (username and password):
-            print("All fields are required!", "error")
-            return redirect(url_for("auth.login_teacher"))
 
         teacher = verify_login_teacher({"teacher_username": username, "teacher_password": password})
 
@@ -105,15 +86,11 @@ def login_teacher():
             session["teacher_username"] = teacher["teacher_username"]
             session["teacher_first_name"] = teacher["teacher_first_name"]
             return redirect(url_for("teacher.teacher_dashboard"))
-        else:
-            print("Invalid credentials!", "error")
-            return redirect(url_for("auth.login_teacher"))
 
     return render_template("login-teacher.html")
 
 
-# Logout (For both students and teachers)
 @auth.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for("main.home"))
+    return redirect(url_for("auth.login_student"))

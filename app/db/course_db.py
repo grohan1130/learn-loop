@@ -55,3 +55,16 @@ def get_course_by_id(course_id):
     except Exception as e:
         print("Failed to retrieve course details:", e)
         return None
+
+def get_all_courses():
+    """Fetches all courses from the course_catalog collection."""
+    try:
+        with get_mongodb_connection() as client:
+            db = client["learn-loop-db"]
+            course_catalog = db["course_catalog"]
+
+            courses = list(course_catalog.find({}, {"_id": 0, "course_id": 1, "course_name": 1}))
+            return courses
+    except Exception as e:
+        print("Failed to retrieve courses:", e)
+        return []
