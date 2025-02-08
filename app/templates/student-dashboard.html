@@ -13,7 +13,11 @@
         {% if enrolled_courses %}
             <ul>
                 {% for course in enrolled_courses %}
-                    <li>{{ course.course_name }} ({{ course.course_id }})</li>
+                    <li>
+                        <a href="{{ url_for('student.student_course_page', course_id=course.course_id) }}">
+                            {{ course.course_name }} ({{ course.course_id }})
+                        </a>
+                    </li>
                 {% endfor %}
             </ul>
         {% else %}

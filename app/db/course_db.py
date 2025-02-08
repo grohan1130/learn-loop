@@ -1,20 +1,19 @@
 import bson
 from app.db.mongodb import get_mongodb_connection
 
+# Add a new course to the database
 def add_course(course_data):
-    """Adds a course to the course_catalog collection with correct data types."""
+    """Adds a course to the course_catalog collection."""
     try:
         with get_mongodb_connection() as client:
             db = client['learn-loop-db']
             collection = db['course_catalog']
 
-            # Ensure correct data types
             course_department = str(course_data["course_department"]).strip().upper()
-            course_number = bson.Int64(int(course_data["course_number"]))  # Enforce int64
+            course_number = bson.Int64(int(course_data["course_number"]))
             course_name = str(course_data["course_name"]).strip()
             teacher_username = str(course_data["teacher_username"]).strip()
 
-            # Generate course_id
             course_id = f"{course_department}{course_number}"
 
             course_document = {
@@ -27,9 +26,11 @@ def add_course(course_data):
 
             result = collection.insert_one(course_document)
             print(f"Course inserted with ID: {result.inserted_id}")
+
     except Exception as e:
         print("Failed to insert course:", e)
 
+# Retrieve all courses taught by a specific teacher
 def get_courses_by_teacher(teacher_username):
     """Retrieves all courses taught by a specific teacher."""
     try:
@@ -44,6 +45,7 @@ def get_courses_by_teacher(teacher_username):
         print("Failed to retrieve courses:", e)
         return []
 
+# Retrieve a course by its ID
 def get_course_by_id(course_id):
     """Fetches a course by its ID."""
     try:
@@ -63,6 +65,7 @@ def get_all_courses():
             db = client["learn-loop-db"]
             course_catalog = db["course_catalog"]
 
+            # Retrieve all courses with only necessary fields
             courses = list(course_catalog.find({}, {"_id": 0, "course_id": 1, "course_name": 1}))
             return courses
     except Exception as e:

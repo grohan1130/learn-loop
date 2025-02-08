@@ -24,6 +24,20 @@
             <p>You are not currently teaching any courses.</p>
         {% endif %}
 
+        <h2>Add a New Course</h2>
+        <form action="{{ url_for('teacher.add_course') }}" method="POST">
+            <label for="department">Department:</label>
+            <input type="text" id="department" name="department" required><br>
+
+            <label for="number">Course Number:</label>
+            <input type="number" id="number" name="number" required><br>
+
+            <label for="name">Course Name:</label>
+            <input type="text" id="name" name="name" required><br>
+
+            <button type="submit">Add Course</button>
+        </form>
+
         <a href="{{ url_for('auth.logout') }}">Logout</a>
     </div>
 </body>

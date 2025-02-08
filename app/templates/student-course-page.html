@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ course.course_name }} - Student View</title>
+</head>
+<body>
+    <div>
+        <h1>{{ course.course_name }} ({{ course.course_id }})</h1>
+        <p><strong>Department:</strong> {{ course.course_department }}</p>
+        <p><strong>Course Number:</strong> {{ course.course_number }}</p>
+        <p><strong>Instructor:</strong> {{ instructor.first_name }} {{ instructor.last_name }}</p>
+
+        <a href="{{ url_for('student.student_dashboard') }}">Back to Dashboard</a> |
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
+    </div>
+</body>
+</html>
